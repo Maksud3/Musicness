@@ -7,16 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hifeful.musicness.R
 import com.hifeful.musicness.data.model.Artist
-import com.hifeful.musicness.ui.ArtistAdapter
+import com.hifeful.musicness.common.adapters.ArtistAdapter
+import com.hifeful.musicness.common.adapters.OnArtistClickListener
 import com.hifeful.musicness.ui.base.BaseFragment
 import com.hifeful.musicness.util.SpacesItemDecoration
 
-class HomeFragment : BaseFragment(), HomeContract.View {
+class HomeFragment : BaseFragment(), HomeContract.View, OnArtistClickListener {
     private val TAG = HomeFragment::class.qualifiedName
 
     // UI
@@ -55,6 +55,7 @@ class HomeFragment : BaseFragment(), HomeContract.View {
         mArtistRecyclerView.isNestedScrollingEnabled = false
 
         mArtistAdapter.mArtistList = mArtistList
+        mArtistAdapter.mOnArtistClickListener = this
     }
 
     override fun onResume() {
@@ -62,6 +63,12 @@ class HomeFragment : BaseFragment(), HomeContract.View {
 
         mPresenter = HomePresenter(this)
         mPresenter.getRandomArtists(50)
+    }
+
+    override fun onArtistClick() {
+        Log.d(TAG, "onArtistClick: puk")
+
+        mNavController.navigate(R.id.action_homeFragment_to_artistFragment)
     }
 
     override fun showArtist(artist: Artist) {

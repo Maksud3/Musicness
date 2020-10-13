@@ -1,6 +1,5 @@
-package com.hifeful.musicness.ui
+package com.hifeful.musicness.common.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -13,13 +12,15 @@ import com.hifeful.musicness.data.model.Artist
 class ArtistAdapter
     : RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>() {
 
-    public var mArtistList = mutableListOf<Artist>()
+    var mArtistList = mutableListOf<Artist>()
         set(value) {
         field = value
         notifyDataSetChanged()
     }
 
-    class ArtistViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
+    var mOnArtistClickListener: OnArtistClickListener? = null
+
+    inner class ArtistViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         RecyclerView.ViewHolder(inflater.inflate(R.layout.item_artist, parent, false)) {
         private val mImage: ImageView = itemView.findViewById(R.id.artist_image)
         private val mName: TextView = itemView.findViewById(R.id.artist_name)
@@ -27,17 +28,21 @@ class ArtistAdapter
         fun bind(artist: Artist) {
             Glide.with(itemView.context)
                 .load(artist.image_url)
-                .centerInside()
+                .centerCrop()
                 .into(mImage)
 
             mName.text = artist.name
+            itemView.setOnClickListener { mOnArtistClickListener?.onArtistClick() }
         }
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return ArtistViewHolder(inflater, parent)
+        return ArtistViewHolder(
+            inflater,
+            parent
+        )
     }
 
     override fun getItemCount(): Int = mArtistList.size
@@ -45,4 +50,8 @@ class ArtistAdapter
     override fun onBindViewHolder(holder: ArtistViewHolder, position: Int) {
         holder.bind(mArtistList[position])
     }
+}
+
+interface OnArtistClickListener {
+    fun onArtistClick()
 }

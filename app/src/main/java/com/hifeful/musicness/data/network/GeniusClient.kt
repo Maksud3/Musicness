@@ -22,5 +22,5 @@ object GeniusClient {
             .build()
     }
 
-    fun getGeniusClient(): GeniusInterface = getRetrofitInstance().create(GeniusInterface::class.java)
+    fun getGeniusClient(): GeniusService = getRetrofitInstance().create(GeniusService::class.java)
 }

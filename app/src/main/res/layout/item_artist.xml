@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="156dp"
     android:layout_height="190dp"
     android:orientation="vertical"
     android:background="?android:colorBackground">
 
-    <ImageView
+    <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/artist_image"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:src="@drawable/ic_launcher_foreground"
-        android:contentDescription="@string/artist_item"/>
+        android:contentDescription="@string/artist_item"
+        app:riv_oval="true"/>
 
     <TextView
         android:id="@+id/artist_name"

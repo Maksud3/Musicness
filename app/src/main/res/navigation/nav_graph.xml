@@ -9,5 +9,14 @@
         android:id="@+id/homeFragment"
         android:name="com.hifeful.musicness.ui.home.HomeFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_artistFragment"
+            app:destination="@id/artistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/artistFragment"
+        android:name="com.hifeful.musicness.ui.artist.ArtistFragment"
+        android:label="fragment_artist"
+        tools:layout="@layout/fragment_artist" />
 </navigation>
