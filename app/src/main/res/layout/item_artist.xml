@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="156dp"
+    android:layout_height="190dp"
+    android:orientation="vertical"
+    android:background="?android:colorBackground">
+
+    <ImageView
+        android:id="@+id/artist_image"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:src="@drawable/ic_launcher_foreground"
+        android:contentDescription="@string/artist_item"/>
+
+    <TextView
+        android:id="@+id/artist_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/proxima_nova_regular"
+        android:layout_marginTop="16dp"
+        android:textAlignment="center"
+        android:text="@string/Test"
+        android:textSize="16sp"
+        android:textColor="?colorOnBackground"
+        android:maxLines="1"/>
+
+</LinearLayout>
+
