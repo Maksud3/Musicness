@@ -13,6 +13,8 @@ import com.hifeful.musicness.R
 import com.hifeful.musicness.data.model.Artist
 import com.hifeful.musicness.common.adapters.ArtistAdapter
 import com.hifeful.musicness.common.adapters.OnArtistClickListener
+import com.hifeful.musicness.ui.artist.ArtistFragment
+import com.hifeful.musicness.ui.artist.ArtistFragmentArgs
 import com.hifeful.musicness.ui.base.BaseFragment
 import com.hifeful.musicness.util.SpacesItemDecoration
 
@@ -41,7 +43,7 @@ class HomeFragment : BaseFragment(), HomeContract.View, OnArtistClickListener {
 
         mNavController = Navigation.findNavController(view)
 
-        mArtistRecyclerView = view.findViewById(R.id.artist_recycler)
+        mArtistRecyclerView = view.findViewById(R.id.home_artist_recycler)
         mArtistAdapter = ArtistAdapter()
         mArtistRecyclerView.adapter = mArtistAdapter
 
@@ -65,10 +67,11 @@ class HomeFragment : BaseFragment(), HomeContract.View, OnArtistClickListener {
         mPresenter.getRandomArtists(50)
     }
 
-    override fun onArtistClick() {
+    override fun onArtistClick(id: Long) {
         Log.d(TAG, "onArtistClick: puk")
 
-        mNavController.navigate(R.id.action_homeFragment_to_artistFragment)
+        val action = HomeFragmentDirections.actionHomeFragmentToArtistFragment(id)
+        mNavController.navigate(action)
     }
 
     override fun showArtist(artist: Artist) {

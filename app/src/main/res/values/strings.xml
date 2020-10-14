@@ -4,6 +4,7 @@
     <string name="error">Error</string>
     <string name="Test">Test</string>
 
+    <string name="artist">Artist</string>
     <string name="artists">Artists</string>
     <string name="artist_item">Artist item</string>
     <string name="artist_photo">Artist photo</string>

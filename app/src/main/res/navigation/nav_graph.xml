@@ -18,5 +18,10 @@
         android:id="@+id/artistFragment"
         android:name="com.hifeful.musicness.ui.artist.ArtistFragment"
         android:label="fragment_artist"
-        tools:layout="@layout/fragment_artist" />
+        tools:layout="@layout/fragment_artist" >
+        <argument
+            android:name="id"
+            app:argType="long"
+            android:defaultValue="0L" />
+    </fragment>
 </navigation>

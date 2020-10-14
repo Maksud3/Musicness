@@ -5,30 +5,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.artist.ArtistFragment">
+    android:fitsSystemWindows="true"
+    tools:context=".ui.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar"
+        android:id="@+id/artist_app_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height">
+        android:layout_height="@dimen/app_bar_height"
+        android:fitsSystemWindows="true"
+        android:animateLayoutChanges="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
+            android:id="@+id/artist_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:contentScrim="@android:color/transparent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:fitsSystemWindows="true"
+            app:toolbarId="@id/artist_toolbar">
 
             <ImageView
+                android:id="@+id/artist_toolbar_image"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="@dimen/app_bar_height"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_foreground"
                 android:contentDescription="@string/artist_photo"
                 app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.7"/>
+                android:fitsSystemWindows="true"/>
             
-            <Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/artist_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"/>
@@ -38,9 +44,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/Test" />
+    <include
+        layout="@layout/content_artist_details"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

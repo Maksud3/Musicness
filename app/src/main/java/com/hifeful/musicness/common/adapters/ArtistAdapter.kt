@@ -32,7 +32,7 @@ class ArtistAdapter
                 .into(mImage)
 
             mName.text = artist.name
-            itemView.setOnClickListener { mOnArtistClickListener?.onArtistClick() }
+            itemView.setOnClickListener { mOnArtistClickListener?.onArtistClick(artist.id) }
         }
 
     }
@@ -53,5 +53,5 @@ class ArtistAdapter
 }
 
 interface OnArtistClickListener {
-    fun onArtistClick()
+    fun onArtistClick(id: Long)
 }
