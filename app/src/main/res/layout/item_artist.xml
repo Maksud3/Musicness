@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="156dp"
     android:layout_height="190dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="?android:colorBackground">
 
@@ -11,7 +10,6 @@
         android:id="@+id/artist_image"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:src="@drawable/ic_launcher_foreground"
         android:contentDescription="@string/artist_item"
         app:riv_oval="true"/>
 
@@ -22,7 +20,6 @@
         android:fontFamily="@font/proxima_nova_regular"
         android:layout_marginTop="16dp"
         android:textAlignment="center"
-        android:text="@string/Test"
         android:textSize="16sp"
         android:textColor="?colorOnBackground"
         android:maxLines="1"/>

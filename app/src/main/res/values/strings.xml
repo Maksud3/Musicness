@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Musicness</string>
 
+    <string name="blank_space">\u0020</string>
     <string name="error">Error</string>
     <string name="Test">Test</string>
+    <string name="favourite">Favourite</string>
 
     <string name="artist">Artist</string>
     <string name="artists">Artists</string>

@@ -24,7 +24,7 @@ class ArtistPresenter(private val mView: ArtistContract.View) : ArtistContract.P
                     ?.asJsonObject?.get("artist")
 
                 val artist = Gson().fromJson(jsonArtist, Artist::class.java)
-                if (artist != null) mView.setUpArtistDetails(artist)
+                if (artist != null) mView.showArtistDetails(artist)
             }
 
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {

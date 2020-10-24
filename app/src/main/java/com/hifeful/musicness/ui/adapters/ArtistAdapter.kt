@@ -1,15 +1,13 @@
-package com.hifeful.musicness.common.adapters
+package com.hifeful.musicness.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hifeful.musicness.R
 import com.hifeful.musicness.data.model.Artist
-import com.makeramen.roundedimageview.RoundedImageView
 
 class ArtistAdapter
     : RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>() {

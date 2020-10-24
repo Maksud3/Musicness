@@ -22,6 +22,6 @@ class SpacesItemDecoration : RecyclerView.ItemDecoration {
         state: RecyclerView.State
     ) {
         super.getItemOffsets(outRect, view, parent, state)
-        outRect.set(mSpace, mSpace, mSpace, mSpace)
+        outRect.set(0, 0, mSpace, mSpace)
     }
 }

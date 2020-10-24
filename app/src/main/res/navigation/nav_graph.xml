@@ -23,5 +23,8 @@
             android:name="id"
             app:argType="long"
             android:defaultValue="0L" />
+        <argument
+            android:name="image_url"
+            app:argType="string" />
     </fragment>
 </navigation>

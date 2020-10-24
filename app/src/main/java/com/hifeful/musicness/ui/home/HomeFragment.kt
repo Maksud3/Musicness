@@ -5,20 +5,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hifeful.musicness.R
 import com.hifeful.musicness.data.model.Artist
-import com.hifeful.musicness.common.adapters.ArtistAdapter
-import com.hifeful.musicness.common.adapters.OnArtistClickListener
+import com.hifeful.musicness.ui.adapters.ArtistAdapter
+import com.hifeful.musicness.ui.adapters.OnArtistClickListener
 import com.hifeful.musicness.ui.artist.ArtistFragment
-import com.hifeful.musicness.ui.artist.ArtistFragmentArgs
 import com.hifeful.musicness.ui.base.BaseFragment
 import com.hifeful.musicness.util.SpacesItemDecoration
 
-class HomeFragment : BaseFragment(), HomeContract.View, OnArtistClickListener {
+class HomeFragment : BaseFragment(), HomeContract.View,
+    OnArtistClickListener {
     private val TAG = HomeFragment::class.qualifiedName
 
     // UI
@@ -43,7 +45,18 @@ class HomeFragment : BaseFragment(), HomeContract.View, OnArtistClickListener {
 
         mNavController = Navigation.findNavController(view)
 
-        mArtistRecyclerView = view.findViewById(R.id.home_artist_recycler)
+        setUpArtistRecycler()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        mPresenter = HomePresenter(this)
+        mPresenter.getRandomArtists(50)
+    }
+
+    override fun setUpArtistRecycler() {
+        mArtistRecyclerView = requireView().findViewById(R.id.home_artist_recycler)
         mArtistAdapter = ArtistAdapter()
         mArtistRecyclerView.adapter = mArtistAdapter
 
@@ -60,18 +73,15 @@ class HomeFragment : BaseFragment(), HomeContract.View, OnArtistClickListener {
         mArtistAdapter.mOnArtistClickListener = this
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        mPresenter = HomePresenter(this)
-        mPresenter.getRandomArtists(50)
-    }
-
-    override fun onArtistClick(id: Long) {
-        Log.d(TAG, "onArtistClick: puk")
-
-        val action = HomeFragmentDirections.actionHomeFragmentToArtistFragment(id)
-        mNavController.navigate(action)
+    override fun onArtistClick(artist: Artist, artistImageView: ImageView) {
+        val action = HomeFragmentDirections.actionHomeFragmentToArtistFragment(artist.id, artist.image_url)
+//        requireActivity().supportFragmentManager.beginTransaction()
+//            .addToBackStack(null)
+//            .addSharedElement(artistImageView, "artist_toolbar_image")
+//            .replace(R.id.nav_host_fragment, ArtistFragment().apply { arguments = action.arguments })
+//            .commit()
+        val extras = FragmentNavigatorExtras(artistImageView to "artist_toolbar_image")
+        mNavController.navigate(action, extras)
     }
 
     override fun showArtist(artist: Artist) {

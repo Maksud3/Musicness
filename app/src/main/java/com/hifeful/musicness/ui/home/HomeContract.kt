@@ -4,6 +4,7 @@ import com.hifeful.musicness.data.model.Artist
 
 interface HomeContract {
     interface View {
+        fun setUpArtistRecycler()
         fun showArtist(artist: Artist)
     }
 
