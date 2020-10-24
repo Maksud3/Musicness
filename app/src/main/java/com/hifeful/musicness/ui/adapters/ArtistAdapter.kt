@@ -4,10 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hifeful.musicness.R
 import com.hifeful.musicness.data.model.Artist
+import com.makeramen.roundedimageview.RoundedImageView
 
 class ArtistAdapter
     : RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>() {
@@ -26,13 +28,14 @@ class ArtistAdapter
         private val mName: TextView = itemView.findViewById(R.id.artist_name)
 
         fun bind(artist: Artist) {
+            mImage.transitionName = artist.id.toString()
             Glide.with(itemView.context)
                 .load(artist.image_url)
                 .centerCrop()
                 .into(mImage)
 
             mName.text = artist.name
-            itemView.setOnClickListener { mOnArtistClickListener?.onArtistClick(artist.id) }
+            itemView.setOnClickListener { mOnArtistClickListener?.onArtistClick(artist, mImage) }
         }
 
     }
@@ -53,5 +56,5 @@ class ArtistAdapter
 }
 
 interface OnArtistClickListener {
-    fun onArtistClick(id: Long)
+    fun onArtistClick(artist: Artist, artistImageView: ImageView)
 }
