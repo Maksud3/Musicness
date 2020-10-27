@@ -10,4 +10,8 @@ interface GeniusService {
     @GET("artists/{id}")
     fun getArtistById(@Path("id") id: Long,
                       @Query("text_format") textFormat: String = "dom"): Call<JsonObject>
+    @GET("artists/{id}/songs")
+    fun getArtistPopularSongs(@Path("id") id: Long,
+                              @Query("sort") sort: String = "popularity",
+                              @Query("per_page") songs: Long = 10) : Call<JsonObject>
 }

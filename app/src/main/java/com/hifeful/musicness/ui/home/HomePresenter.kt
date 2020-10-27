@@ -5,15 +5,19 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.hifeful.musicness.data.model.Artist
 import com.hifeful.musicness.data.network.GeniusClient
+import com.hifeful.musicness.ui.base.BasePresenter
+import moxy.InjectViewState
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import kotlin.random.Random
 
-class HomePresenter(private val mView: HomeContract.View) : HomeContract.Presenter {
+class HomePresenter : BasePresenter<HomeView>() {
+    private val TAG = HomePresenter::class.qualifiedName
+    
     private val mGeniusClient = GeniusClient.getGeniusClient()
 
-    override fun getArtistById(id: Long) {
+    private fun getArtistById(id: Long) {
         mGeniusClient.getArtistById(id).enqueue(object : Callback<JsonObject> {
             override fun onResponse(
                 call: Call<JsonObject>,
@@ -24,7 +28,7 @@ class HomePresenter(private val mView: HomeContract.View) : HomeContract.Present
                     ?.asJsonObject?.get("artist")
 
                 val artist = Gson().fromJson(jsonArtist, Artist::class.java)
-                if (artist != null) mView.showArtist(artist)
+                if (artist != null) viewState.showArtist(artist)
             }
 
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
@@ -33,7 +37,8 @@ class HomePresenter(private val mView: HomeContract.View) : HomeContract.Present
         })
     }
 
-    override fun getRandomArtists(amount: Int) {
+    fun getRandomArtists(amount: Int) {
+        Log.i(TAG, "getRandomArtists: ")
         repeat(amount) {
             getArtistById(Random.nextLong(1, 10000))
         }

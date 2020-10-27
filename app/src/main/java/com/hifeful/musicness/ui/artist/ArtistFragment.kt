@@ -1,42 +1,42 @@
 package com.hifeful.musicness.ui.artist
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.transition.TransitionInflater
 import android.view.*
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.doOnPreDraw
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.hifeful.musicness.R
 import com.hifeful.musicness.data.model.Artist
+import com.hifeful.musicness.data.model.Song
+import com.hifeful.musicness.ui.adapters.SongAdapter
 import com.hifeful.musicness.ui.base.BaseFragment
+import com.hifeful.musicness.ui.base.BaseView
+import moxy.ktx.moxyPresenter
 
-class ArtistFragment : BaseFragment(), ArtistContract.View {
+class ArtistFragment : BaseFragment(), ArtistView {
     private val TAG = ArtistFragment::class.qualifiedName
 
     // UI
-    private lateinit var mNavController: NavController
-
     private lateinit var mFavouriteMenuItem: MenuItem
     private lateinit var mAppBarLayout: AppBarLayout
     private lateinit var mCollapsingToolbarLayout: CollapsingToolbarLayout
     private lateinit var mToolbar: Toolbar
     private lateinit var mArtistImage: ImageView
+    private lateinit var mSongRecyclerView: RecyclerView
+    private lateinit var mSongAdapter: SongAdapter
 
     // Variables
-    private lateinit var mPresenter: ArtistContract.Presenter
+    private val mPresenter by moxyPresenter { ArtistPresenter() }
+    private lateinit var mNavController: NavController
     private val mArgs: ArtistFragmentArgs by navArgs()
+    private lateinit var mCurrentArtist: Artist
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,17 +51,15 @@ class ArtistFragment : BaseFragment(), ArtistContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         mNavController = findNavController()
+        mCurrentArtist = mArgs.artist
 
-        showArtistImage()
         setUpCollapsingToolbar()
-    }
+        showArtistDetails()
 
-    override fun onResume() {
-        super.onResume()
-
-        mPresenter = ArtistPresenter(this)
-        mPresenter.getArtistById(mArgs.id)
+        setUpSongRecycler()
+        mPresenter.getArtistPopularSongs(mCurrentArtist.id)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -115,14 +113,23 @@ class ArtistFragment : BaseFragment(), ArtistContract.View {
         (activity as AppCompatActivity).supportActionBar?.setHomeButtonEnabled(true)
     }
 
-    override fun showArtistImage() {
+    override fun showArtistDetails() {
+        mCollapsingToolbarLayout.title = mCurrentArtist.name
         mArtistImage = requireView().findViewById(R.id.artist_toolbar_image)
-        Glide.with(this)
-            .load(mArgs.imageUrl)
-            .into(mArtistImage)
+        showImage(this, mCurrentArtist.image_url, mArtistImage)
     }
 
-    override fun showArtistDetails(artist: Artist) {
-        mCollapsingToolbarLayout.title = artist.name
+    override fun setUpSongRecycler() {
+        mSongRecyclerView = requireView().findViewById(R.id.artist_songs_recycler)
+        mSongAdapter = SongAdapter()
+
+        mSongRecyclerView.adapter = mSongAdapter
+
+        mSongRecyclerView.layoutManager = LinearLayoutManager(requireContext(),
+            LinearLayoutManager.VERTICAL, false)
+    }
+
+    override fun showArtistPopularSongs(songs: List<Song>) {
+        mSongAdapter.mSongList = songs.toMutableList()
     }
 }

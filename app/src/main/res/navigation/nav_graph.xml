@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_artistFragment"
-            app:destination="@id/artistFragment" />
+            app:destination="@id/artistFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/artistFragment"
@@ -20,11 +24,7 @@
         android:label="fragment_artist"
         tools:layout="@layout/fragment_artist" >
         <argument
-            android:name="id"
-            app:argType="long"
-            android:defaultValue="0L" />
-        <argument
-            android:name="image_url"
-            app:argType="string" />
+            android:name="artist"
+            app:argType="com.hifeful.musicness.data.model.Artist" />
     </fragment>
 </navigation>

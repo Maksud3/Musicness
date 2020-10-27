@@ -26,7 +26,6 @@ class ArtistAdapter
         private val mName: TextView = itemView.findViewById(R.id.artist_name)
 
         fun bind(artist: Artist) {
-            mImage.transitionName = artist.id.toString()
             Glide.with(itemView.context)
                 .load(artist.image_url)
                 .centerCrop()
@@ -38,6 +37,10 @@ class ArtistAdapter
 
     }
 
+    interface OnArtistClickListener {
+        fun onArtistClick(artist: Artist, artistImageView: ImageView)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return ArtistViewHolder(
@@ -47,12 +50,8 @@ class ArtistAdapter
     }
 
     override fun getItemCount(): Int = mArtistList.size
-
     override fun onBindViewHolder(holder: ArtistViewHolder, position: Int) {
         holder.bind(mArtistList[position])
     }
-}
 
-interface OnArtistClickListener {
-    fun onArtistClick(artist: Artist, artistImageView: ImageView)
 }

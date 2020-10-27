@@ -3,11 +3,18 @@
 
     <string name="blank_space">\u0020</string>
     <string name="error">Error</string>
-    <string name="Test">Test</string>
+    <string name="lorem_ipsum">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+        Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,
+        when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+    </string>
+    <string name="test">Test</string>
     <string name="favourite">Favourite</string>
 
     <string name="artist">Artist</string>
     <string name="artists">Artists</string>
     <string name="artist_item">Artist item</string>
     <string name="artist_photo">Artist photo</string>
+
+    <string name="popular_songs">Popular songs</string>
+    <string name="song_image">Song image</string>
 </resources>
