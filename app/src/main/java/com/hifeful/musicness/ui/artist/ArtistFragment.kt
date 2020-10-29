@@ -1,10 +1,13 @@
 package com.hifeful.musicness.ui.artist
 
+import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -12,12 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.hifeful.musicness.R
 import com.hifeful.musicness.data.model.Artist
 import com.hifeful.musicness.data.model.Song
 import com.hifeful.musicness.ui.adapters.SongAdapter
 import com.hifeful.musicness.ui.base.BaseFragment
-import com.hifeful.musicness.ui.base.BaseView
+import com.hifeful.musicness.util.DateUtils
 import moxy.ktx.moxyPresenter
 
 class ArtistFragment : BaseFragment(), ArtistView {
@@ -31,12 +35,15 @@ class ArtistFragment : BaseFragment(), ArtistView {
     private lateinit var mArtistImage: ImageView
     private lateinit var mSongRecyclerView: RecyclerView
     private lateinit var mSongAdapter: SongAdapter
+    private lateinit var mFavouriteFab: FloatingActionButton
 
     // Variables
     private val mPresenter by moxyPresenter { ArtistPresenter() }
     private lateinit var mNavController: NavController
     private val mArgs: ArtistFragmentArgs by navArgs()
     private lateinit var mCurrentArtist: Artist
+    private var mIsCurrentArtistCached = false
+    private var mIsFavouriteMenuItemPressed = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,6 +66,7 @@ class ArtistFragment : BaseFragment(), ArtistView {
         showArtistDetails()
 
         setUpSongRecycler()
+        setUpFab()
         mPresenter.getArtistPopularSongs(mCurrentArtist.id)
     }
 
@@ -66,6 +74,7 @@ class ArtistFragment : BaseFragment(), ArtistView {
         inflater.inflate(R.menu.menu_artist, menu)
         mFavouriteMenuItem = menu.findItem(R.id.action_favourite)
         mFavouriteMenuItem.isVisible = false
+        mPresenter.isFavouriteArtistExist(mArgs.artist.id)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -74,6 +83,9 @@ class ArtistFragment : BaseFragment(), ArtistView {
             android.R.id.home -> {
                 mNavController.popBackStack()
                 return true
+            }
+            R.id.action_favourite -> {
+                onFavouriteButtonClick()
             }
         }
 
@@ -127,6 +139,53 @@ class ArtistFragment : BaseFragment(), ArtistView {
 
         mSongRecyclerView.layoutManager = LinearLayoutManager(requireContext(),
             LinearLayoutManager.VERTICAL, false)
+    }
+
+    override fun isFavouriteArtistCached(isCached: Boolean) {
+        mIsCurrentArtistCached = isCached
+    }
+
+    override fun initFavouriteButton(isPressed: Boolean) {
+        Log.i(TAG, "initFavouriteButton: $isPressed")
+        mIsFavouriteMenuItemPressed = isPressed
+        if (mIsFavouriteMenuItemPressed) enableFavouriteButton() else disableFavouriteButton()
+    }
+
+    override fun onFavouriteButtonClick() {
+        if (mIsFavouriteMenuItemPressed) {
+            mIsFavouriteMenuItemPressed = false
+            mPresenter.updateFavouriteArtist(mArgs.artist.id, mIsFavouriteMenuItemPressed)
+            disableFavouriteButton()
+        } else {
+            mIsFavouriteMenuItemPressed = true
+            val timestamp = DateUtils.getCurrentTimestamp() ?: ""
+            if (!mIsCurrentArtistCached) {
+                mArgs.artist.isFavourite = mIsFavouriteMenuItemPressed
+                mArgs.artist.timestamp = timestamp
+                mPresenter.addFavouriteArtist(mArgs.artist)
+                mIsCurrentArtistCached = true
+            } else {
+                mPresenter.updateFavouriteArtist(mArgs.artist.id, mIsFavouriteMenuItemPressed, timestamp)
+            }
+            enableFavouriteButton()
+        }
+    }
+
+    override fun enableFavouriteButton() {
+        mFavouriteMenuItem.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_favorite_pressed)
+        mFavouriteFab.imageTintList = ColorStateList.valueOf(ContextCompat
+            .getColor(requireContext(), R.color.favourite_pressed))
+    }
+
+    override fun disableFavouriteButton() {
+        mFavouriteMenuItem.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_favorite)
+        mFavouriteFab.imageTintList = ColorStateList.valueOf(ContextCompat
+            .getColor(requireContext(), R.color.white))
+    }
+
+    override fun setUpFab() {
+        mFavouriteFab = requireView().findViewById(R.id.artist_favourite)
+        mFavouriteFab.setOnClickListener { onFavouriteButtonClick() }
     }
 
     override fun showArtistPopularSongs(songs: List<Song>) {

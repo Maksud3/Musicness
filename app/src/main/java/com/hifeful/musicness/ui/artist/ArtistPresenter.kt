@@ -6,6 +6,9 @@ import com.google.gson.JsonObject
 import com.hifeful.musicness.data.model.Song
 import com.hifeful.musicness.data.network.GeniusClient
 import com.hifeful.musicness.ui.base.BasePresenter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -47,4 +50,15 @@ class ArtistPresenter : BasePresenter<ArtistView>() {
         })
     }
 
+    fun isFavouriteArtistExist(id: Long) {
+        launch {
+            val isExist = mFavouriteArtistRepository.isFavouriteArtistExist(id)
+            viewState.isFavouriteArtistCached(isExist)
+            if (isExist) {
+                withContext(Dispatchers.Main) {
+                    viewState.initFavouriteButton(mFavouriteArtistRepository.isArtistFavourite(id))
+                }
+            }
+        }
+    }
 }

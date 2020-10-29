@@ -3,4 +3,7 @@
     <color name="colorPrimary">#fbc02d</color>
     <color name="colorPrimaryDark">#c49000</color>
     <color name="colorAccent">#fbc02d</color>
+
+    <color name="white">#FFFFFFFF</color>
+    <color name="favourite_pressed">#e57373</color>
 </resources>

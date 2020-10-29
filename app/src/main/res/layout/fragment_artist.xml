@@ -52,7 +52,7 @@
         android:layout_margin="@dimen/mobile_margin"
         app:layout_anchor="@id/artist_app_bar"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/ic_baseline_favorite_24"
+        app:srcCompat="@drawable/ic_baseline_favorite"
         app:backgroundTint="@color/colorPrimary"
         app:tint="@android:color/white"
         android:contentDescription="@string/favourite"/>
