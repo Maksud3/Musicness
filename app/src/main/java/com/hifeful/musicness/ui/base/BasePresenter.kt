@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
+import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 abstract class BasePresenter<V : BaseView> : MvpPresenter<V>(), CoroutineScope {
@@ -32,7 +33,7 @@ abstract class BasePresenter<V : BaseView> : MvpPresenter<V>(), CoroutineScope {
         }
     }
 
-    fun updateFavouriteArtist(id: Long, isFavourite: Boolean, timestamp: String) {
+    fun updateFavouriteArtist(id: Long, isFavourite: Boolean, timestamp: Date) {
         launch {
             mFavouriteArtistRepository.updateFavouriteArtist(id, isFavourite, timestamp)
         }

@@ -12,11 +12,7 @@ import com.hifeful.musicness.data.model.Artist
 class ArtistAdapter
     : RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>() {
 
-    var mArtistList = mutableListOf<Artist>()
-        set(value) {
-        field = value
-        notifyDataSetChanged()
-    }
+    private var mArtistList = mutableListOf<Artist>()
 
     var mOnArtistClickListener: OnArtistClickListener? = null
 
@@ -52,6 +48,19 @@ class ArtistAdapter
     override fun getItemCount(): Int = mArtistList.size
     override fun onBindViewHolder(holder: ArtistViewHolder, position: Int) {
         holder.bind(mArtistList[position])
+    }
+
+    fun initArtists(artists: List<Artist>) {
+        mArtistList.clear()
+        mArtistList.addAll(artists)
+
+        notifyDataSetChanged()
+    }
+
+    fun addArtist(artist: Artist) {
+        mArtistList.add(artist)
+
+        notifyDataSetChanged()
     }
 
 }

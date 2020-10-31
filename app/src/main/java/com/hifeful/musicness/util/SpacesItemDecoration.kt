@@ -5,15 +5,9 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class SpacesItemDecoration : RecyclerView.ItemDecoration {
-    private val mSpace: Int
-    constructor(space: Int) {
-        mSpace = space
-    }
-
-    constructor(context: Context, spaceId: Int)
-            : this(context.resources.getDimensionPixelSize(spaceId)) {
-    }
+class SpacesItemDecoration(private val leftSpace: Int, private val topSpace: Int,
+                           private val rightSpace: Int, private val bottomSpace: Int) :
+    RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -22,6 +16,6 @@ class SpacesItemDecoration : RecyclerView.ItemDecoration {
         state: RecyclerView.State
     ) {
         super.getItemOffsets(outRect, view, parent, state)
-        outRect.set(0, 0, mSpace, mSpace)
+        outRect.set(leftSpace, topSpace, rightSpace, bottomSpace)
     }
 }

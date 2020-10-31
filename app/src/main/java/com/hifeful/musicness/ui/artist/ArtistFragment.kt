@@ -21,8 +21,8 @@ import com.hifeful.musicness.data.model.Artist
 import com.hifeful.musicness.data.model.Song
 import com.hifeful.musicness.ui.adapters.SongAdapter
 import com.hifeful.musicness.ui.base.BaseFragment
-import com.hifeful.musicness.util.DateUtils
 import moxy.ktx.moxyPresenter
+import java.util.*
 
 class ArtistFragment : BaseFragment(), ArtistView {
     private val TAG = ArtistFragment::class.qualifiedName
@@ -62,9 +62,6 @@ class ArtistFragment : BaseFragment(), ArtistView {
         mNavController = findNavController()
         mCurrentArtist = mArgs.artist
 
-        setUpCollapsingToolbar()
-        showArtistDetails()
-
         setUpSongRecycler()
         setUpFab()
         mPresenter.getArtistPopularSongs(mCurrentArtist.id)
@@ -74,7 +71,9 @@ class ArtistFragment : BaseFragment(), ArtistView {
         inflater.inflate(R.menu.menu_artist, menu)
         mFavouriteMenuItem = menu.findItem(R.id.action_favourite)
         mFavouriteMenuItem.isVisible = false
-        mPresenter.isFavouriteArtistExist(mArgs.artist.id)
+        initArtist()
+        setUpCollapsingToolbar()
+        showArtistDetails()
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -141,6 +140,18 @@ class ArtistFragment : BaseFragment(), ArtistView {
             LinearLayoutManager.VERTICAL, false)
     }
 
+    override fun initArtist() {
+        if (mArgs.artist.isFavourite) {
+            Log.i(TAG, "initArtist: isFavourite")
+            mIsCurrentArtistCached = true
+            mIsFavouriteMenuItemPressed = true
+            enableFavouriteButton()
+        } else {
+            Log.i(TAG, "initArtist: isNotFavourite")
+            mPresenter.isFavouriteArtistExist(mArgs.artist.id)
+        }
+    }
+
     override fun isFavouriteArtistCached(isCached: Boolean) {
         mIsCurrentArtistCached = isCached
     }
@@ -158,7 +169,7 @@ class ArtistFragment : BaseFragment(), ArtistView {
             disableFavouriteButton()
         } else {
             mIsFavouriteMenuItemPressed = true
-            val timestamp = DateUtils.getCurrentTimestamp() ?: ""
+            val timestamp = Calendar.getInstance().time
             if (!mIsCurrentArtistCached) {
                 mArgs.artist.isFavourite = mIsFavouriteMenuItemPressed
                 mArgs.artist.timestamp = timestamp

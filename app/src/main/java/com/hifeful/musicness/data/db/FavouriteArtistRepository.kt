@@ -1,6 +1,7 @@
 package com.hifeful.musicness.data.db
 
 import com.hifeful.musicness.data.model.Artist
+import java.util.*
 
 class FavouriteArtistRepository(private val appDatabase: MusicnessDatabase) {
     suspend fun getFavouriteArtists() = appDatabase.getFavouriteArtistDao()
@@ -11,6 +12,6 @@ class FavouriteArtistRepository(private val appDatabase: MusicnessDatabase) {
         .insertFavouriteArtist(artist)
     suspend fun updateFavouriteArtist(id: Long, isFavourite: Boolean) = appDatabase.getFavouriteArtistDao()
         .updateFavouriteArtist(id, isFavourite)
-    suspend fun updateFavouriteArtist(id: Long, isFavourite: Boolean, timestamp: String) = appDatabase.getFavouriteArtistDao()
+    suspend fun updateFavouriteArtist(id: Long, isFavourite: Boolean, timestamp: Date) = appDatabase.getFavouriteArtistDao()
         .updateFavouriteArtistWithTimestamp(id, isFavourite, timestamp)
 }

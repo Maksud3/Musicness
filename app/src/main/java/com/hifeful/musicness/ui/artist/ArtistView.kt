@@ -13,6 +13,7 @@ interface ArtistView : BaseView {
     fun showArtistDetails()
     fun showArtistPopularSongs(songs: List<Song>)
     fun setUpSongRecycler()
+    fun initArtist()
     fun initFavouriteButton(isPressed: Boolean)
     fun isFavouriteArtistCached(isCached: Boolean)
     fun onFavouriteButtonClick()
