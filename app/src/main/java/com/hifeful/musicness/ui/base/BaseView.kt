@@ -8,5 +8,6 @@ import moxy.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(SingleStateStrategy::class)
 interface BaseView : MvpView {
+    fun showDisplayHomeUp()
     fun showImage(fragment: Fragment, image: String, imageView: ImageView)
 }

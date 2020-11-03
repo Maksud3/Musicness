@@ -28,13 +28,13 @@ class ArtistAdapter
                 .into(mImage)
 
             mName.text = artist.name
-            itemView.setOnClickListener { mOnArtistClickListener?.onArtistClick(artist, mImage) }
+            itemView.setOnClickListener { mOnArtistClickListener?.onArtistClick(artist) }
         }
 
     }
 
     interface OnArtistClickListener {
-        fun onArtistClick(artist: Artist, artistImageView: ImageView)
+        fun onArtistClick(artist: Artist)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistViewHolder {

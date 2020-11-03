@@ -99,7 +99,7 @@ class HomeFragment : BaseFragment(), HomeView,
         mFavoriteArtistAdapter.initArtists(artists)
     }
 
-    override fun onArtistClick(artist: Artist, artistImageView: ImageView) {
+    override fun onArtistClick(artist: Artist) {
         val action = HomeFragmentDirections.actionHomeFragmentToArtistFragment(artist)
         Log.i(TAG, "onArtistClick: $artist")
         mNavController.navigate(action)

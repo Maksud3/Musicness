@@ -26,5 +26,16 @@
         <argument
             android:name="artist"
             app:argType="com.hifeful.musicness.data.model.Artist" />
+        <action
+            android:id="@+id/action_artistFragment_to_songFragment"
+            app:destination="@id/songFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/songFragment"
+        android:name="com.hifeful.musicness.ui.song.SongFragment"
+        android:label="SongFragment" >
+        <argument
+            android:name="song"
+            app:argType="com.hifeful.musicness.data.model.Song" />
     </fragment>
 </navigation>

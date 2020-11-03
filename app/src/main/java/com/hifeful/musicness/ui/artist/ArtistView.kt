@@ -8,7 +8,6 @@ import moxy.viewstate.strategy.StateStrategyType
 @StateStrategyType(SingleStateStrategy::class)
 interface ArtistView : BaseView {
     fun setUpToolbar(view: android.view.View)
-    fun showDisplayHomeUp()
     fun setUpCollapsingToolbar()
     fun showArtistDetails()
     fun showArtistPopularSongs(songs: List<Song>)

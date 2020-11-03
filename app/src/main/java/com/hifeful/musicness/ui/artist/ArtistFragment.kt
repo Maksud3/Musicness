@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +25,7 @@ import com.hifeful.musicness.ui.base.BaseFragment
 import moxy.ktx.moxyPresenter
 import java.util.*
 
-class ArtistFragment : BaseFragment(), ArtistView {
+class ArtistFragment : BaseFragment(), ArtistView, SongAdapter.OnSongClickListener {
     private val TAG = ArtistFragment::class.qualifiedName
 
     // UI
@@ -119,11 +120,6 @@ class ArtistFragment : BaseFragment(), ArtistView {
         })
     }
 
-    override fun showDisplayHomeUp() {
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        (activity as AppCompatActivity).supportActionBar?.setHomeButtonEnabled(true)
-    }
-
     override fun showArtistDetails() {
         mCollapsingToolbarLayout.title = mCurrentArtist.name
         mArtistImage = requireView().findViewById(R.id.artist_toolbar_image)
@@ -132,12 +128,20 @@ class ArtistFragment : BaseFragment(), ArtistView {
 
     override fun setUpSongRecycler() {
         mSongRecyclerView = requireView().findViewById(R.id.artist_songs_recycler)
-        mSongAdapter = SongAdapter()
+        mSongAdapter = SongAdapter().apply {
+            mOnSongClickListener = this@ArtistFragment
+        }
 
-        mSongRecyclerView.adapter = mSongAdapter
-
-        mSongRecyclerView.layoutManager = LinearLayoutManager(requireContext(),
-            LinearLayoutManager.VERTICAL, false)
+        mSongRecyclerView.apply {
+            adapter = mSongAdapter
+            layoutManager = LinearLayoutManager(requireContext(),
+                LinearLayoutManager.VERTICAL, false)
+            postponeEnterTransition()
+            viewTreeObserver.addOnPreDrawListener {
+                startPostponedEnterTransition()
+                true
+            }
+        }
     }
 
     override fun initArtist() {
@@ -201,5 +205,12 @@ class ArtistFragment : BaseFragment(), ArtistView {
 
     override fun showArtistPopularSongs(songs: List<Song>) {
         mSongAdapter.mSongList = songs.toMutableList()
+    }
+
+    override fun onSongClick(song: Song, imageView: ImageView) {
+        val extras = FragmentNavigatorExtras(imageView to "song_toolbar_image")
+        val action = ArtistFragmentDirections.actionArtistFragmentToSongFragment(song)
+
+        mNavController.navigate(action, extras)
     }
 }

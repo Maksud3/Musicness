@@ -25,20 +25,22 @@ class SongAdapter : RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
         private val mTitle: TextView = itemView.findViewById(R.id.song_name)
 
         fun bind(song: Song) {
+            mImage.transitionName = song.id.toString()
             Glide.with(itemView.context)
                 .load(song.image)
+                .override(300)
                 .centerCrop()
                 .into(mImage)
 
             mArtist.text = song.primary_artist
             mTitle.text = song.title
-//            itemView.setOnClickListener { mOnSongClickListener?.onArtistClick(artist, mImage) }
+            itemView.setOnClickListener { mOnSongClickListener?.onSongClick(song, mImage) }
         }
 
     }
 
     interface OnSongClickListener {
-        fun onArtistClick(song: Song)
+        fun onSongClick(song: Song, imageView: ImageView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongViewHolder {

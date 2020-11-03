@@ -6,12 +6,17 @@ import com.google.gson.JsonObject
 import com.hifeful.musicness.data.model.Song
 import com.hifeful.musicness.data.network.GeniusClient
 import com.hifeful.musicness.ui.base.BasePresenter
+import com.hifeful.musicness.util.API_KEY
+import com.hifeful.musicness.util.USER_AGENT
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jsoup.Jsoup
+import org.jsoup.safety.Whitelist
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 
 
 class ArtistPresenter : BasePresenter<ArtistView>() {
