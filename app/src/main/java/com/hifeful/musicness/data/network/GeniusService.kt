@@ -14,4 +14,6 @@ interface GeniusService {
     fun getArtistPopularSongs(@Path("id") id: Long,
                               @Query("sort") sort: String = "popularity",
                               @Query("per_page") songs: Long = 10) : Call<JsonObject>
+    @GET("search")
+    fun searchSongs(@Query("q") query: String) : Call<JsonObject>
 }
