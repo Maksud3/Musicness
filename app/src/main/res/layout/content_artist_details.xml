@@ -31,7 +31,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="16dp"
-            tools:listitem="@layout/item_song"/>
+            tools:listitem="@layout/item_song"
+            android:overScrollMode="never"/>
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

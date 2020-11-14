@@ -26,7 +26,8 @@
             android:id="@+id/home_favorite_artists_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/item_artist"/>
+            tools:listitem="@layout/item_artist"
+            android:overScrollMode="never"/>
 
         <TextView
             android:id="@+id/home_artist_header"
@@ -44,7 +45,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="16dp"
-            tools:listitem="@layout/item_artist" />
+            tools:listitem="@layout/item_artist"
+            android:overScrollMode="never"/>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

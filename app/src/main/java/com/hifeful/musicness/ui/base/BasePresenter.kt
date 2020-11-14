@@ -4,6 +4,7 @@ import android.util.Log
 import com.hifeful.musicness.data.db.FavouriteArtistRepository
 import com.hifeful.musicness.data.db.MusicnessDatabase
 import com.hifeful.musicness.data.model.Artist
+import com.hifeful.musicness.data.network.GeniusClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -14,7 +15,8 @@ import kotlin.coroutines.CoroutineContext
 
 abstract class BasePresenter<V : BaseView> : MvpPresenter<V>(), CoroutineScope {
     private val TAG = BasePresenter::class.qualifiedName
-    
+
+    protected val mGeniusClient = GeniusClient.getGeniusClient()
     protected val mFavouriteArtistRepository = FavouriteArtistRepository(MusicnessDatabase.getInstance())
 
     private val job = Job()

@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -18,6 +19,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.hifeful.musicness.R
 import com.hifeful.musicness.data.model.Song
+import com.hifeful.musicness.data.model.SongCredits
 import com.hifeful.musicness.ui.base.BaseFragment
 import moxy.ktx.moxyPresenter
 
@@ -29,6 +31,8 @@ class SongFragment : BaseFragment(), SongView {
     private lateinit var mCollapsingToolbarLayout: CollapsingToolbarLayout
     private lateinit var mToolbar: Toolbar
     private lateinit var mSongImage: ImageView
+    private lateinit var mSongArtist: TextView
+    private lateinit var mSongCredits: TextView
     private lateinit var mSongLyrics: TextView
 
     // Variables
@@ -63,11 +67,8 @@ class SongFragment : BaseFragment(), SongView {
 
         setUpCollapsingToolbar()
         showSongDetails()
+        mPresenter.getSongCredits(mCurrentSong.id)
         mPresenter.getSongLyrics(mCurrentSong.url)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -89,6 +90,7 @@ class SongFragment : BaseFragment(), SongView {
     override fun setUpCollapsingToolbar() {
         mAppBarLayout = requireView().findViewById(R.id.song_app_bar)
         mCollapsingToolbarLayout = requireView().findViewById(R.id.song_toolbar_layout)
+        mSongCredits = requireView().findViewById(R.id.song_toolbar_credits)
 
         mAppBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             var isShow = false
@@ -98,10 +100,14 @@ class SongFragment : BaseFragment(), SongView {
                     scrollRange = appBarLayout.totalScrollRange
                 }
 
-                if (scrollRange + verticalOffset == 0) {
-                    isShow = true
-                } else if (isShow) {
+                if (isShow && scrollRange + verticalOffset < scrollRange / 2) {
+                    mSongArtist.isVisible = false
+                    mSongCredits.isVisible = false
                     isShow = false
+                } else if (!isShow && scrollRange + verticalOffset > scrollRange / 2) {
+                    mSongArtist.isVisible = true
+                    mSongCredits.isVisible = true
+                    isShow = true
                 }
             }
         })
@@ -111,10 +117,19 @@ class SongFragment : BaseFragment(), SongView {
         mCollapsingToolbarLayout.title = mCurrentSong.title
         mSongImage = requireView().findViewById(R.id.song_toolbar_image)
         showImage(this, mCurrentSong.image, mSongImage)
+        mSongArtist = requireView().findViewById(R.id.song_toolbar_artist)
+        mSongArtist.text = mCurrentSong.primary_artist
     }
 
     override fun showSongLyrics(lyrics: String) {
         mSongLyrics = requireView().findViewById(R.id.song_lyrics)
         mSongLyrics.text = lyrics
+    }
+
+    override fun setUpSongCredits(songCredits: SongCredits) {
+        mSongCredits.setOnClickListener {
+            val directions = SongFragmentDirections.actionSongFragmentToSongCreditsFragment(songCredits)
+            mNavController.navigate(directions)
+        }
     }
 }

@@ -14,15 +14,14 @@
     <string name="artists">Artists</string>
     <string name="artist_item">Artist item</string>
     <string name="artist_photo">Artist photo</string>
+    <string name="credits">Credits</string>
 
     <string name="popular_songs">Popular songs</string>
     <string name="song_image">Song image</string>
 
-    <string-array name="query_suggestions">
-        <item>Android</item>
-        <item>iOS</item>
-        <item>SCALA</item>
-        <item>Ruby</item>
-        <item>JavaScript</item>
-    </string-array>
+    <string name="release_date">Release date</string>
+    <string name="primary_artist">Primary artist</string>
+    <string name="featured_artists">Featured artists</string>
+    <string name="producers">Producers</string>
+    <string name="writers">Writers</string>
 </resources>

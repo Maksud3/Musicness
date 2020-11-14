@@ -21,8 +21,7 @@ import java.lang.Exception
 
 class ArtistPresenter : BasePresenter<ArtistView>() {
     private val TAG = ArtistPresenter::class.qualifiedName
-    private val mGeniusClient = GeniusClient.getGeniusClient()
-
+    
     fun getArtistPopularSongs(id: Long) {
         mGeniusClient.getArtistPopularSongs(id).enqueue(object : Callback<JsonObject> {
             override fun onResponse(

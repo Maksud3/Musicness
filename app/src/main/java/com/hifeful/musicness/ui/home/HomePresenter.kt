@@ -18,8 +18,6 @@ class HomePresenter : BasePresenter<HomeView>() {
     private val TAG = HomePresenter::class.qualifiedName
     private var mArtists: MutableList<Artist>? = null
 
-    private val mGeniusClient = GeniusClient.getGeniusClient()
-
     private var queryTextChangedJob: Job? = null
 
     private fun getArtistById(id: Long) {

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/song_credits_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/fragment_song_credits">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/release_date"
+            android:fontFamily="@font/proxima_nova_regular"
+            android:textSize="21sp"
+            android:textColor="?colorOnBackground"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/song_credits_release_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/release_date"
+            android:fontFamily="@font/proxima_nova_regular"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/primary_artist"
+            android:fontFamily="@font/proxima_nova_regular"
+            android:textSize="21sp"
+            android:textColor="?colorOnBackground"
+            android:textStyle="bold"/>
+
+        <include
+            android:id="@+id/song_credits_primary_artist"
+            layout="@layout/item_artist_small"/>
+
+        <TextView
+            android:id="@+id/song_credits_featured_artists"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/featured_artists"
+            android:fontFamily="@font/proxima_nova_regular"
+            android:textSize="21sp"
+            android:textColor="?colorOnBackground"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/song_credits_featured_artists_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:overScrollMode="never"/>
+
+        <TextView
+            android:id="@+id/song_credits_producers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/producers"
+            android:fontFamily="@font/proxima_nova_regular"
+            android:textSize="21sp"
+            android:textColor="?colorOnBackground"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/song_credits_producers_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:overScrollMode="never"/>
+
+        <TextView
+            android:id="@+id/song_credits_writers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/writers"
+            android:fontFamily="@font/proxima_nova_regular"
+            android:textSize="21sp"
+            android:textColor="?colorOnBackground"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/song_credits_writers_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:overScrollMode="never"/>
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -40,5 +40,23 @@
         <argument
             android:name="song"
             app:argType="com.hifeful.musicness.data.model.Song" />
+        <action
+            android:id="@+id/action_songFragment_to_songCreditsFragment"
+            app:destination="@id/songCreditsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/songCreditsFragment"
+        android:name="com.hifeful.musicness.ui.songcredits.SongCreditsFragment"
+        android:label="SongCreditsFragment" >
+        <argument
+            android:name="song_credits"
+            app:argType="com.hifeful.musicness.data.model.SongCredits" />
+        <action
+            android:id="@+id/action_songCreditsFragment_to_artistFragment2"
+            app:destination="@id/artistFragment" />
     </fragment>
 </navigation>
