@@ -15,4 +15,10 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light"/>
 
+    <style name="MaterialSearchViewStyle">
+        <item name="searchSuggestionIcon">@drawable/ic_baseline_music_note_24</item>
+<!--        <item name="android:textColor">@color/theme_primary_text_inverted</item>-->
+        <item name="android:hint">@string/search_song</item>
+    </style>
+
 </resources>

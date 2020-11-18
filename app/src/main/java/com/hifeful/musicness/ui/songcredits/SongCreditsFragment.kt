@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -29,7 +30,7 @@ class SongCreditsFragment : BaseFragment(), SongCreditsView, ArtistSmallAdapter.
     // UI
     private lateinit var mToolbar: androidx.appcompat.widget.Toolbar
     private lateinit var mReleaseDate: TextView
-    private lateinit var mPrimaryArtistLayout: LinearLayout
+    private lateinit var mPrimaryArtistLayout: RelativeLayout
     private lateinit var mPrimaryArtistImage: ImageView
     private lateinit var mPrimaryArtistName: TextView
 

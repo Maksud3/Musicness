@@ -20,6 +20,11 @@ class HomePresenter : BasePresenter<HomeView>() {
 
     private var queryTextChangedJob: Job? = null
 
+    // SearchView
+    var mIsSearchViewVisible = false
+    var mSongsSearchView: List<Song> = listOf()
+    var mSongNamesSearchView: Array<String> = mutableListOf<String>().toTypedArray()
+
     private fun getArtistById(id: Long) {
         mGeniusClient.getArtistById(id).enqueue(object : Callback<JsonObject> {
             override fun onResponse(
@@ -76,8 +81,9 @@ class HomePresenter : BasePresenter<HomeView>() {
     fun searchSongsThrottled(query: String) {
         queryTextChangedJob?.cancel()
 
-        queryTextChangedJob = launch(Dispatchers.Main) {
+        queryTextChangedJob = launch(Dispatchers.IO) {
             delay(500)
+            Log.i(TAG, "searchSongsThrottled: after delay")
             searchSongs(query)
         }
     }

@@ -1,17 +1,13 @@
 package com.hifeful.musicness.ui.song
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
@@ -61,14 +57,15 @@ class SongFragment : BaseFragment(), SongView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         mNavController = findNavController()
         mCurrentSong = mArgs.song
 
         setUpCollapsingToolbar()
         showSongDetails()
         mPresenter.getSongCredits(mCurrentSong.id)
-        mPresenter.getSongLyrics(mCurrentSong.url)
+        if (savedInstanceState == null) {
+            mPresenter.getSongLyrics(mCurrentSong.url)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -97,20 +94,30 @@ class SongFragment : BaseFragment(), SongView {
             var scrollRange = -1
             override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
                 if (appBarLayout != null && scrollRange == -1) {
+                    hideToolbarInfo()
                     scrollRange = appBarLayout.totalScrollRange
                 }
 
                 if (isShow && scrollRange + verticalOffset < scrollRange / 2) {
-                    mSongArtist.isVisible = false
-                    mSongCredits.isVisible = false
+                    hideToolbarInfo()
                     isShow = false
                 } else if (!isShow && scrollRange + verticalOffset > scrollRange / 2) {
-                    mSongArtist.isVisible = true
-                    mSongCredits.isVisible = true
+                    showToolbarInfo()
                     isShow = true
                 }
             }
         })
+    }
+
+    override fun showToolbarInfo() {
+        mSongArtist.isVisible = true
+        mSongCredits.isVisible = true
+        mPresenter.mSongCredits?.let { setUpSongCredits(it) }
+    }
+
+    override fun hideToolbarInfo() {
+        mSongArtist.isVisible = false
+        mSongCredits.isVisible = false
     }
 
     override fun showSongDetails() {

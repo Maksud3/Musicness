@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CustomSearchAdapter extends BaseAdapter implements Filterable {
@@ -47,14 +48,7 @@ public class CustomSearchAdapter extends BaseAdapter implements Filterable {
                 if (!TextUtils.isEmpty(constraint)) {
 
                     // Retrieve the autocomplete results.
-                    List<String> searchData = new ArrayList<>();
-
-                    for (String string : suggestions) {
-                        if (TextUtils.isEmpty(constraint) ||
-                                string.toLowerCase().contains(constraint.toString().toLowerCase())) {
-                            searchData.add(string);
-                        }
-                    }
+                    List<String> searchData = new ArrayList<>(Arrays.asList(suggestions));
 
                     // Assign the data to the FilterResults
                     filterResults.values = searchData;

@@ -24,4 +24,6 @@
     <string name="featured_artists">Featured artists</string>
     <string name="producers">Producers</string>
     <string name="writers">Writers</string>
+
+    <string name="search_song">Search a song</string>
 </resources>

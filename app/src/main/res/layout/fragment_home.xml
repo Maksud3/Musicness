@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
+    android:id="@+id/home_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -9,6 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"/>
+    <View
+        android:id="@+id/home_background_blur"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_transparent"
+        android:visibility="gone"/>
     <FrameLayout
         android:id="@+id/home_toolbar_container"
         android:layout_width="match_parent"
@@ -20,9 +27,10 @@
             app:title="@string/app_name"
             android:background="@color/colorPrimary"
             android:theme="@style/AppTheme.AppBarOverlay" />
-        <com.miguelcatalan.materialsearchview.MaterialSearchView
+        <com.hifeful.musicness.util.MaterialSearchView
             android:id="@+id/home_search_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            style="@style/MaterialSearchViewStyle"/>
     </FrameLayout>
 </FrameLayout>

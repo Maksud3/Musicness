@@ -19,45 +19,61 @@ import java.lang.Exception
 class SongPresenter : BasePresenter<SongView>() {
     private val TAG = SongPresenter::class.qualifiedName
 
+    var mSongCredits: SongCredits? = null
+    private var mSongLyrics: String? = null
+
     fun getSongLyrics(url: String) {
-        launch {
-            try {
-                val doc = withContext(Dispatchers.IO) {
-                    Jsoup.connect(url)
-                        .userAgent(USER_AGENT)
-                        .get()
-                }
-                val lyricsDiv = doc.select(".lyrics")
-                if (lyricsDiv.isNotEmpty()) {
-                    val lyrics = Jsoup.clean(lyricsDiv.html(),
-                        Whitelist.none().addTags("br"))
-                        .trim().replace("<br> ", "")
-                    withContext(Dispatchers.Main) {
-                        viewState.showSongLyrics(lyrics)
+        if (mSongLyrics != null) {
+            viewState.showSongLyrics(mSongLyrics!!)
+        } else {
+            launch {
+                try {
+                    val doc = withContext(Dispatchers.IO) {
+                        Jsoup.connect(url)
+                            .userAgent(USER_AGENT)
+                            .get()
                     }
+                    val lyricsDiv = doc.select(".lyrics")
+                    if (lyricsDiv.isNotEmpty()) {
+                        val lyrics = Jsoup.clean(
+                            lyricsDiv.html(),
+                            Whitelist.none().addTags("br")
+                        )
+                            .trim().replace("<br> ", "")
+                        withContext(Dispatchers.Main) {
+                            Log.i(TAG, "getSongLyrics: Fr?")
+                            mSongLyrics = lyrics
+                            viewState.showSongLyrics(lyrics)
+                        }
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
             }
         }
     }
 
     fun getSongCredits(id: Long) {
-        mGeniusClient.getSongById(id).enqueue(object : Callback<JsonObject> {
-            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                val jsonSong = response.body()
-                    ?.asJsonObject?.get("response")
-                    ?.asJsonObject?.get("song")
+        if (mSongCredits != null) {
+            viewState.setUpSongCredits(mSongCredits!!)
+        } else {
+            mGeniusClient.getSongById(id).enqueue(object : Callback<JsonObject> {
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    val jsonSong = response.body()
+                        ?.asJsonObject?.get("response")
+                        ?.asJsonObject?.get("song")
 
-                val songCredits = Gson().fromJson(jsonSong, SongCredits::class.java)
-                if (songCredits != null) {
-                    viewState.setUpSongCredits(songCredits)
+                    val songCredits = Gson().fromJson(jsonSong, SongCredits::class.java)
+                    if (songCredits != null) {
+                        mSongCredits = songCredits
+                        viewState.setUpSongCredits(songCredits)
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                t.message?.let { Log.d(TAG, "Fail") }
-            }
-        })
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    t.message?.let { Log.d(TAG, "Fail") }
+                }
+            })
+        }
     }
 }
