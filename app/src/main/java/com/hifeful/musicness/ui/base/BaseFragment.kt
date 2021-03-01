@@ -1,8 +1,5 @@
 package com.hifeful.musicness.ui.base
 
-import android.content.Context
-import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -23,15 +20,10 @@ abstract class BaseFragment : MvpAppCompatFragment(), BaseView {
             .into(imageView)
     }
 
-    override fun showSoftKeyboard(view: View) {
-        if (view.requestFocus()) {
-            val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
-        }
-    }
-
-    override fun hideSoftKeyboard(view: View) {
-        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
+    override fun showImage(fragment: Fragment, imageId: Int, imageView: ImageView) {
+        Glide.with(fragment)
+            .load(imageId)
+            .override(600)
+            .into(imageView)
     }
 }

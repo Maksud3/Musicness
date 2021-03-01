@@ -3,11 +3,10 @@ package com.hifeful.musicness.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.hifeful.musicness.R
 import com.hifeful.musicness.data.model.Song
+import com.hifeful.musicness.databinding.ItemSongBinding
 
 class SongAdapter : RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
     var mSongList = mutableListOf<Song>()
@@ -18,23 +17,22 @@ class SongAdapter : RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
 
     var mOnSongClickListener: OnSongClickListener? = null
 
-    inner class SongViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
-        RecyclerView.ViewHolder(inflater.inflate(R.layout.item_song, parent, false)) {
-        private val mImage: ImageView = itemView.findViewById(R.id.song_image)
-        private val mArtist: TextView = itemView.findViewById(R.id.song_artist)
-        private val mTitle: TextView = itemView.findViewById(R.id.song_name)
+    inner class SongViewHolder(private val songBinding: ItemSongBinding) :
+        RecyclerView.ViewHolder(songBinding.root) {
 
         fun bind(song: Song) {
-            mImage.transitionName = song.id.toString()
-            Glide.with(itemView.context)
-                .load(song.image)
-                .override(300)
-                .centerCrop()
-                .into(mImage)
+            songBinding.songImage.apply {
+                Glide.with(itemView.context)
+                    .load(song.image)
+                    .override(300)
+                    .centerCrop()
+                    .into(this)
+                transitionName = song.id.toString()
+            }
 
-            mArtist.text = song.primary_artist
-            mTitle.text = song.title
-            itemView.setOnClickListener { mOnSongClickListener?.onSongClick(song, mImage) }
+            songBinding.songArtist.text = song.primary_artist
+            songBinding.songName.text = song.title
+            songBinding.root.setOnClickListener { mOnSongClickListener?.onSongClick(song, songBinding.songImage) }
         }
 
     }
@@ -44,11 +42,8 @@ class SongAdapter : RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        return SongViewHolder(
-            inflater,
-            parent
-        )
+        return SongViewHolder(ItemSongBinding.inflate(LayoutInflater.from(parent.context),
+            parent, false))
     }
 
     override fun getItemCount(): Int = mSongList.size

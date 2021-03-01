@@ -21,6 +21,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.hifeful.musicness.R
 import com.hifeful.musicness.data.model.Artist
 import com.hifeful.musicness.data.model.Song
+import com.hifeful.musicness.databinding.FragmentArtistBinding
 import com.hifeful.musicness.ui.adapters.SongAdapter
 import com.hifeful.musicness.ui.base.BaseFragment
 import moxy.ktx.moxyPresenter
@@ -30,19 +31,16 @@ class ArtistFragment : BaseFragment(), ArtistView, SongAdapter.OnSongClickListen
     private val TAG = ArtistFragment::class.qualifiedName
 
     // UI
+    private var _binding: FragmentArtistBinding? = null
+    private val binding get() = _binding!!
     private lateinit var mFavouriteMenuItem: MenuItem
-    private lateinit var mAppBarLayout: AppBarLayout
-    private lateinit var mCollapsingToolbarLayout: CollapsingToolbarLayout
-    private lateinit var mToolbar: Toolbar
-    private lateinit var mArtistImage: ImageView
-    private lateinit var mSongRecyclerView: RecyclerView
-    private lateinit var mSongAdapter: SongAdapter
-    private lateinit var mFavouriteFab: FloatingActionButton
 
     // Variables
     private val mPresenter by moxyPresenter { ArtistPresenter() }
     private lateinit var mNavController: NavController
     private val mArgs: ArtistFragmentArgs by navArgs()
+
+    private lateinit var mSongAdapter: SongAdapter
     private lateinit var mCurrentArtist: Artist
     private var mIsCurrentArtistCached = false
     private var mIsFavouriteMenuItemPressed = false
@@ -57,7 +55,9 @@ class ArtistFragment : BaseFragment(), ArtistView, SongAdapter.OnSongClickListen
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_artist, container, false)
+        _binding = FragmentArtistBinding.inflate(inflater, container, false)
+        val view = binding.root
+
         setHasOptionsMenu(true)
         setUpToolbar(view)
         showDisplayHomeUp()
@@ -73,6 +73,11 @@ class ArtistFragment : BaseFragment(), ArtistView, SongAdapter.OnSongClickListen
         setUpSongRecycler()
         setUpFab()
         mPresenter.getArtistPopularSongs(mCurrentArtist.id)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -100,15 +105,11 @@ class ArtistFragment : BaseFragment(), ArtistView, SongAdapter.OnSongClickListen
     }
 
     override fun setUpToolbar(view: View) {
-        mToolbar = view.findViewById(R.id.artist_toolbar)
-        (activity as AppCompatActivity).setSupportActionBar(mToolbar)
+        (activity as AppCompatActivity).setSupportActionBar(binding.artistToolbar)
     }
 
     override fun setUpCollapsingToolbar() {
-        mAppBarLayout = requireView().findViewById(R.id.artist_app_bar)
-        mCollapsingToolbarLayout = requireView().findViewById(R.id.artist_toolbar_layout)
-
-        mAppBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+        binding.artistAppBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             var isShow = false
             var scrollRange = -1
             override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
@@ -128,18 +129,24 @@ class ArtistFragment : BaseFragment(), ArtistView, SongAdapter.OnSongClickListen
     }
 
     override fun showArtistDetails() {
-        mCollapsingToolbarLayout.title = mCurrentArtist.name
-        mArtistImage = requireView().findViewById(R.id.artist_toolbar_image)
-        showImage(this, mCurrentArtist.image_url, mArtistImage)
+        binding.artistToolbarLayout.title = mCurrentArtist.name
+
+        if (mCurrentArtist.image_url.contains("default_avatar")) {
+            showImage(this,
+                mPresenter.getDrawableImageId(requireContext(), "genius_default_avatar"),
+                binding.artistToolbarImage)
+        } else {
+            showImage(this, mCurrentArtist.image_url,
+                binding.artistToolbarImage)
+        }
     }
 
     override fun setUpSongRecycler() {
-        mSongRecyclerView = requireView().findViewById(R.id.artist_songs_recycler)
         mSongAdapter = SongAdapter().apply {
             mOnSongClickListener = this@ArtistFragment
         }
 
-        mSongRecyclerView.apply {
+        binding.artistContent.artistSongsRecycler.apply {
             adapter = mSongAdapter
             layoutManager = LinearLayoutManager(requireContext(),
                 LinearLayoutManager.VERTICAL, false)
@@ -176,10 +183,12 @@ class ArtistFragment : BaseFragment(), ArtistView, SongAdapter.OnSongClickListen
     override fun onFavouriteButtonClick() {
         if (mIsFavouriteMenuItemPressed) {
             mIsFavouriteMenuItemPressed = false
+            mArgs.artist.isFavourite = false
             mPresenter.updateFavouriteArtist(mArgs.artist.id, mIsFavouriteMenuItemPressed)
             disableFavouriteButton()
         } else {
             mIsFavouriteMenuItemPressed = true
+            mArgs.artist.isFavourite = true
             val timestamp = Calendar.getInstance().time
             if (!mIsCurrentArtistCached) {
                 mArgs.artist.isFavourite = mIsFavouriteMenuItemPressed
@@ -195,19 +204,18 @@ class ArtistFragment : BaseFragment(), ArtistView, SongAdapter.OnSongClickListen
 
     override fun enableFavouriteButton() {
         mFavouriteMenuItem.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_favorite_pressed)
-        mFavouriteFab.imageTintList = ColorStateList.valueOf(ContextCompat
+        binding.artistFavourite.imageTintList = ColorStateList.valueOf(ContextCompat
             .getColor(requireContext(), R.color.favourite_pressed))
     }
 
     override fun disableFavouriteButton() {
         mFavouriteMenuItem.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_favorite)
-        mFavouriteFab.imageTintList = ColorStateList.valueOf(ContextCompat
+        binding.artistFavourite.imageTintList = ColorStateList.valueOf(ContextCompat
             .getColor(requireContext(), R.color.white))
     }
 
     override fun setUpFab() {
-        mFavouriteFab = requireView().findViewById(R.id.artist_favourite)
-        mFavouriteFab.setOnClickListener { onFavouriteButtonClick() }
+        binding.artistFavourite.setOnClickListener { onFavouriteButtonClick() }
     }
 
     override fun showArtistPopularSongs(songs: List<Song>) {

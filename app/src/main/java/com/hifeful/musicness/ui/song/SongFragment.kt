@@ -2,20 +2,16 @@ package com.hifeful.musicness.ui.song
 
 import android.os.Bundle
 import android.view.*
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.CollapsingToolbarLayout
-import com.hifeful.musicness.R
 import com.hifeful.musicness.data.model.Song
 import com.hifeful.musicness.data.model.SongCredits
+import com.hifeful.musicness.databinding.FragmentSongBinding
 import com.hifeful.musicness.ui.base.BaseFragment
 import moxy.ktx.moxyPresenter
 
@@ -23,13 +19,8 @@ class SongFragment : BaseFragment(), SongView {
     private val TAG = SongFragment::class.qualifiedName
 
     // UI
-    private lateinit var mAppBarLayout: AppBarLayout
-    private lateinit var mCollapsingToolbarLayout: CollapsingToolbarLayout
-    private lateinit var mToolbar: Toolbar
-    private lateinit var mSongImage: ImageView
-    private lateinit var mSongArtist: TextView
-    private lateinit var mSongCredits: TextView
-    private lateinit var mSongLyrics: TextView
+    private var _binding: FragmentSongBinding? = null
+    private val binding get() = _binding!!
 
     // Variables
     private val mPresenter by moxyPresenter { SongPresenter() }
@@ -48,7 +39,9 @@ class SongFragment : BaseFragment(), SongView {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_song, container, false)
+        _binding = FragmentSongBinding.inflate(inflater, container, false)
+        val view = binding.root
+
         setHasOptionsMenu(true)
         setUpToolbar(view)
         showDisplayHomeUp()
@@ -68,6 +61,11 @@ class SongFragment : BaseFragment(), SongView {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -80,16 +78,11 @@ class SongFragment : BaseFragment(), SongView {
     }
 
     override fun setUpToolbar(view: View) {
-        mToolbar = view.findViewById(R.id.song_toolbar)
-        (activity as AppCompatActivity).setSupportActionBar(mToolbar)
+        (activity as AppCompatActivity).setSupportActionBar(binding.songToolbar)
     }
 
     override fun setUpCollapsingToolbar() {
-        mAppBarLayout = requireView().findViewById(R.id.song_app_bar)
-        mCollapsingToolbarLayout = requireView().findViewById(R.id.song_toolbar_layout)
-        mSongCredits = requireView().findViewById(R.id.song_toolbar_credits)
-
-        mAppBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+        binding.songAppBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             var isShow = false
             var scrollRange = -1
             override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
@@ -110,31 +103,28 @@ class SongFragment : BaseFragment(), SongView {
     }
 
     override fun showToolbarInfo() {
-        mSongArtist.isVisible = true
-        mSongCredits.isVisible = true
+        binding.songToolbarArtist.isVisible = true
+        binding.songToolbarCredits.isVisible = true
         mPresenter.mSongCredits?.let { setUpSongCredits(it) }
     }
 
     override fun hideToolbarInfo() {
-        mSongArtist.isVisible = false
-        mSongCredits.isVisible = false
+        binding.songToolbarArtist.isVisible = false
+        binding.songToolbarCredits.isVisible = false
     }
 
     override fun showSongDetails() {
-        mCollapsingToolbarLayout.title = mCurrentSong.title
-        mSongImage = requireView().findViewById(R.id.song_toolbar_image)
-        showImage(this, mCurrentSong.image, mSongImage)
-        mSongArtist = requireView().findViewById(R.id.song_toolbar_artist)
-        mSongArtist.text = mCurrentSong.primary_artist
+        binding.songToolbarLayout.title = mCurrentSong.title
+        showImage(this, mCurrentSong.image, binding.songToolbarImage)
+        binding.songToolbarArtist.text = mCurrentSong.primary_artist
     }
 
     override fun showSongLyrics(lyrics: String) {
-        mSongLyrics = requireView().findViewById(R.id.song_lyrics)
-        mSongLyrics.text = lyrics
+        binding.songContent.songLyrics.text = lyrics
     }
 
     override fun setUpSongCredits(songCredits: SongCredits) {
-        mSongCredits.setOnClickListener {
+        binding.songToolbarCredits.setOnClickListener {
             val directions = SongFragmentDirections.actionSongFragmentToSongCreditsFragment(songCredits)
             mNavController.navigate(directions)
         }

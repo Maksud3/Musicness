@@ -1,5 +1,6 @@
 package com.hifeful.musicness.ui.base
 
+import android.content.Context
 import android.util.Log
 import com.hifeful.musicness.data.db.FavouriteArtistRepository
 import com.hifeful.musicness.data.db.MusicnessDatabase
@@ -39,5 +40,9 @@ abstract class BasePresenter<V : BaseView> : MvpPresenter<V>(), CoroutineScope {
         launch {
             mFavouriteArtistRepository.updateFavouriteArtist(id, isFavourite, timestamp)
         }
+    }
+
+    fun getDrawableImageId(context: Context, imageName: String): Int {
+        return context.resources.getIdentifier(imageName, "drawable", context.packageName)
     }
 }

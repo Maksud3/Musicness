@@ -16,7 +16,7 @@ import kotlin.random.Random
 
 class HomePresenter : BasePresenter<HomeView>() {
     private val TAG = HomePresenter::class.qualifiedName
-    private var mArtists: MutableList<Artist>? = null
+    var mArtists: MutableList<Artist>? = null
 
     private var queryTextChangedJob: Job? = null
 
@@ -97,8 +97,8 @@ class HomePresenter : BasePresenter<HomeView>() {
         }
     }
 
-    fun getRandomArtists(amount: Int) {
-        if (mArtists != null) {
+    fun getRandomArtists(amount: Int = 30) {
+        if (mArtists != null && mArtists!!.isNotEmpty()) {
             Log.i(TAG, "getRandomArtists: show")
             viewState.showArtists(mArtists!!)
         } else {

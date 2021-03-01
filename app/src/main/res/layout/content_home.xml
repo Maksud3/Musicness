@@ -1,9 +1,11 @@
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/fragment_home">
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,16 +31,34 @@
             tools:listitem="@layout/item_artist"
             android:overScrollMode="never"/>
 
-        <TextView
-            android:id="@+id/home_artist_header"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/artists"
-            android:fontFamily="@font/proxima_nova_regular"
-            android:textSize="21sp"
-            android:textColor="?colorOnBackground"
-            android:textStyle="bold"/>
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal"
+            android:weightSum="10">
+            <TextView
+                android:id="@+id/home_artist_header"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="9"
+                android:text="@string/random_artists"
+                android:fontFamily="@font/proxima_nova_regular"
+                android:textSize="21sp"
+                android:textColor="?colorOnBackground"
+                android:textStyle="bold"/>
+
+            <ImageView
+                android:id="@+id/home_artist_refresh"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:layout_gravity="bottom"
+                android:src="@drawable/ic_baseline_refresh_24"
+                android:contentDescription="@string/refresh"/>
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/home_artist_recycler"

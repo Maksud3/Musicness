@@ -15,5 +15,6 @@
         android:theme="@style/AppTheme.AppBarOverlay" />
 
     <include
+        android:id="@+id/song_credits_content"
         layout="@layout/content_song_credits"/>
 </LinearLayout>

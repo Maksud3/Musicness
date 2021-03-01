@@ -14,6 +14,7 @@ interface HomeView : BaseView {
     fun setUpSearch(searchItem: MenuItem)
     fun showSearchResults(songs: List<Song>)
     fun setUpFavoriteSection()
+    fun setUpRandomArtistsSection()
     fun showFavoriteArtists(artists: List<Artist>)
     fun setUpArtistRecycler()
     fun showArtist(artist: Artist)

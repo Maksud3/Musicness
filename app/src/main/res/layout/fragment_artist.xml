@@ -44,6 +44,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include
+        android:id="@+id/artist_content"
         layout="@layout/content_artist_details"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

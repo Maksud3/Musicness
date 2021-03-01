@@ -46,7 +46,6 @@ public class CustomSearchAdapter extends BaseAdapter implements Filterable {
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
                 if (!TextUtils.isEmpty(constraint)) {
-
                     // Retrieve the autocomplete results.
                     List<String> searchData = new ArrayList<>(Arrays.asList(suggestions));
 

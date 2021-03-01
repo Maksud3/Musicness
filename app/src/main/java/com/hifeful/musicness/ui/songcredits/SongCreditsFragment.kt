@@ -6,8 +6,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -22,28 +20,27 @@ import com.bumptech.glide.Glide
 import com.hifeful.musicness.R
 import com.hifeful.musicness.data.model.Artist
 import com.hifeful.musicness.data.model.SongCredits
-import com.hifeful.musicness.ui.adapters.ArtistAdapter
+import com.hifeful.musicness.databinding.FragmentSongCreditsBinding
 import com.hifeful.musicness.ui.adapters.ArtistSmallAdapter
 import com.hifeful.musicness.ui.base.BaseFragment
 
 class SongCreditsFragment : BaseFragment(), SongCreditsView, ArtistSmallAdapter.OnArtistSmallClickListener {
     // UI
-    private lateinit var mToolbar: androidx.appcompat.widget.Toolbar
-    private lateinit var mReleaseDate: TextView
-    private lateinit var mPrimaryArtistLayout: RelativeLayout
-    private lateinit var mPrimaryArtistImage: ImageView
-    private lateinit var mPrimaryArtistName: TextView
+    private var _binding: FragmentSongCreditsBinding? = null
+    private val binding get() = _binding!!
 
     // Variables
-    private lateinit var mNavController: NavController
     private val mArgs: SongCreditsFragmentArgs by navArgs()
+    private lateinit var mNavController: NavController
     private lateinit var mSongCredits: SongCredits
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_song_credits, container, false)
+        _binding = FragmentSongCreditsBinding.inflate(inflater, container, false)
+        val view = binding.root
+
         setHasOptionsMenu(true)
         setUpToolbar(view)
         showDisplayHomeUp()
@@ -56,6 +53,11 @@ class SongCreditsFragment : BaseFragment(), SongCreditsView, ArtistSmallAdapter.
         mNavController = findNavController()
         mSongCredits = mArgs.songCredits
         setUpSongCredits()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -77,47 +79,54 @@ class SongCreditsFragment : BaseFragment(), SongCreditsView, ArtistSmallAdapter.
     }
 
     override fun setUpToolbar(view: View) {
-        mToolbar = view.findViewById(R.id.song_credits_toolbar)
-        (activity as AppCompatActivity).setSupportActionBar(mToolbar)
+        (activity as AppCompatActivity).setSupportActionBar(binding.songCreditsToolbar)
     }
 
     override fun setUpSongCredits() {
-        mReleaseDate = requireView().findViewById(R.id.song_credits_release_date)
-        mReleaseDate.text = mSongCredits.releaseDate
+        binding.songCreditsContent.songCreditsReleaseDate.text = mSongCredits.releaseDate
         setUpPrimaryArtist()
         setUpStaff(mSongCredits.featuredArtists,
-            R.id.song_credits_featured_artists, R.id.song_credits_featured_artists_recycler,
+            binding.songCreditsContent.songCreditsFeaturedArtists,
+            binding.songCreditsContent.songCreditsFeaturedArtistsRecycler,
             "featured")
         setUpStaff(mSongCredits.producerArtists,
-            R.id.song_credits_producers, R.id.song_credits_producers_recycler,
+            binding.songCreditsContent.songCreditsProducers,
+            binding.songCreditsContent.songCreditsProducersRecycler,
             "producer")
         setUpStaff(mSongCredits.writerArtists,
-            R.id.song_credits_writers, R.id.song_credits_writers_recycler,
+            binding.songCreditsContent.songCreditsWriters,
+            binding.songCreditsContent.songCreditsWritersRecycler,
             "writer")
     }
 
     override fun setUpPrimaryArtist() {
-        mPrimaryArtistLayout = requireView().findViewById(R.id.song_credits_primary_artist)
-        mPrimaryArtistLayout.setOnClickListener { onArtistClick(mSongCredits.primaryArtist, mPrimaryArtistImage) }
-        mPrimaryArtistImage = requireView().findViewById(R.id.artist_small_image)
-        mPrimaryArtistImage.transitionName = "primary_${mSongCredits.primaryArtist.id}"
-        showImage(this, mSongCredits.primaryArtist.image_url, mPrimaryArtistImage)
-        mPrimaryArtistName = requireView().findViewById(R.id.artist_small_name)
-        mPrimaryArtistName.text = mSongCredits.primaryArtist.name
+        binding.songCreditsContent.songCreditsPrimaryArtist.artistSmallLayout
+            .setOnClickListener { onArtistClick(mSongCredits.primaryArtist,
+                binding.songCreditsContent.songCreditsPrimaryArtist.artistSmallImage) }
+
+        binding.songCreditsContent.songCreditsPrimaryArtist
+            .artistSmallImage.transitionName = "primary_${mSongCredits.primaryArtist.id}"
+
+        showImage(this, mSongCredits.primaryArtist.image_url,
+            binding.songCreditsContent.songCreditsPrimaryArtist.artistSmallImage)
+
+        binding.songCreditsContent.songCreditsPrimaryArtist
+            .artistSmallName.text = mSongCredits.primaryArtist.name
     }
 
-    override fun setUpStaff(staffList: List<Artist>, headerId: Int, recyclerId: Int, label: String) {
+    override fun setUpStaff(staffList: List<Artist>,
+                            headerView: TextView, recyclerView: RecyclerView,
+                            label: String) {
         if (staffList.isNotEmpty()) {
-            requireView().findViewById<TextView>(headerId).apply { isVisible = true }
+            headerView.apply { isVisible = true }
 
-            val staffRecycler = requireView().findViewById<RecyclerView>(recyclerId)
             val staffAdapter = ArtistSmallAdapter().apply {
                 mArtistList = staffList.toMutableList()
                 mLabel = label
                 mOnArtistClickListener = this@SongCreditsFragment
             }
 
-            staffRecycler.apply {
+            recyclerView.apply {
                 adapter = staffAdapter
                 layoutManager = LinearLayoutManager(requireContext(),
                     LinearLayoutManager.VERTICAL, false)

@@ -2,33 +2,28 @@ package com.hifeful.musicness.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.hifeful.musicness.R
 import com.hifeful.musicness.data.model.Artist
+import com.hifeful.musicness.databinding.ItemArtistBinding
 
 class ArtistAdapter
     : RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>() {
-
     private var mArtistList = mutableListOf<Artist>()
 
     var mOnArtistClickListener: OnArtistClickListener? = null
 
-    inner class ArtistViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
-        RecyclerView.ViewHolder(inflater.inflate(R.layout.item_artist, parent, false)) {
-        private val mImage: ImageView = itemView.findViewById(R.id.artist_image)
-        private val mName: TextView = itemView.findViewById(R.id.artist_name)
+    inner class ArtistViewHolder(private val artistBinding: ItemArtistBinding) :
+        RecyclerView.ViewHolder(artistBinding.root) {
 
         fun bind(artist: Artist) {
             Glide.with(itemView.context)
                 .load(artist.image_url)
                 .centerCrop()
-                .into(mImage)
+                .into(artistBinding.artistImage)
 
-            mName.text = artist.name
-            itemView.setOnClickListener { mOnArtistClickListener?.onArtistClick(artist) }
+            artistBinding.artistName.text = artist.name
+            artistBinding.root.setOnClickListener { mOnArtistClickListener?.onArtistClick(artist) }
         }
 
     }
@@ -38,11 +33,8 @@ class ArtistAdapter
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        return ArtistViewHolder(
-            inflater,
-            parent
-        )
+        return ArtistViewHolder(ItemArtistBinding.inflate(LayoutInflater.from(parent.context),
+            parent, false))
     }
 
     override fun getItemCount(): Int = mArtistList.size
@@ -61,5 +53,9 @@ class ArtistAdapter
         mArtistList.add(artist)
 
         notifyDataSetChanged()
+    }
+
+    fun clearArtists() {
+        mArtistList.clear()
     }
 }

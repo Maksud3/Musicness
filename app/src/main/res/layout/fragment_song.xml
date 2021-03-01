@@ -89,6 +89,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include
+        android:id="@+id/song_content"
         layout="@layout/content_song_details"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

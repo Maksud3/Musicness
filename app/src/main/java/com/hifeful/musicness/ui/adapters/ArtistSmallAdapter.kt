@@ -3,31 +3,30 @@ package com.hifeful.musicness.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.hifeful.musicness.R
 import com.hifeful.musicness.data.model.Artist
+import com.hifeful.musicness.databinding.ItemArtistSmallBinding
 
 class ArtistSmallAdapter : RecyclerView.Adapter<ArtistSmallAdapter.ArtistSmallViewHolder>() {
     var mArtistList = mutableListOf<Artist>()
     var mOnArtistClickListener: OnArtistSmallClickListener? = null
     var mLabel = ""
 
-    inner class ArtistSmallViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
-        RecyclerView.ViewHolder(inflater.inflate(R.layout.item_artist_small, parent, false)) {
-        private val mImage: ImageView = itemView.findViewById(R.id.artist_small_image)
-        private val mName: TextView = itemView.findViewById(R.id.artist_small_name)
+    inner class ArtistSmallViewHolder(private val artistSmallBinding: ItemArtistSmallBinding) :
+        RecyclerView.ViewHolder(artistSmallBinding.root) {
 
         fun bind(artist: Artist) {
-            mImage.transitionName = "${mLabel}_${artist.id}"
-            Glide.with(itemView.context)
-                .load(artist.image_url)
-                .centerCrop()
-                .into(mImage)
-
-            mName.text = artist.name
-            itemView.setOnClickListener { mOnArtistClickListener?.onArtistClick(artist, mImage) }
+            artistSmallBinding.artistSmallImage.apply {
+                Glide.with(itemView.context)
+                    .load(artist.image_url)
+                    .centerCrop()
+                    .into(this)
+                transitionName = "${mLabel}_${artist.id}"
+            }
+            artistSmallBinding.artistSmallName.text = artist.name
+            artistSmallBinding.root.setOnClickListener {
+                mOnArtistClickListener?.onArtistClick(artist, artistSmallBinding.artistSmallImage) }
         }
 
     }
@@ -37,11 +36,8 @@ class ArtistSmallAdapter : RecyclerView.Adapter<ArtistSmallAdapter.ArtistSmallVi
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistSmallViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        return ArtistSmallViewHolder(
-            inflater,
-            parent
-        )
+        return ArtistSmallViewHolder(ItemArtistSmallBinding.inflate(LayoutInflater.from(parent.context),
+            parent, false))
     }
 
     override fun getItemCount(): Int = mArtistList.size
